@@ -5,14 +5,18 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                dockerImage = docker.build("mcoiraton/helloworldtest:latest")
+                script {
+                    dockerImage = docker.build("mcoiraton/helloworldtest:latest")
+                }
             }
         }
         stage('push') {
             steps {
                 echo 'Pushing..'
-                withDockerRegistry([ credentialsId: "testdocker"]){
-                    dockerImage.push()
+                script {
+                    withDockerRegistry([ credentialsId: "testdocker"]){
+                        dockerImage.push('latest')
+                    }
                 }
             }
         }
